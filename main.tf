@@ -7,10 +7,19 @@ terraform {
   }
 }
 
+resource "random_id" "resource" {
+  keepers = {
+    # Generate a new id for every unique resource id
+    resource_id = var.context.resource.id
+  }
+
+  byte_length = 8
+}
+
 resource "aws_memorydb_cluster" "memorydb_cluster" {
-  name                = var.memory_db_cluster_name
-  node_type           = var.node_type
-  num_shards           = var.num_shards
+  name                   = "memdb-${random_id.resource.hex}"
+  node_type              = var.node_type
+  num_shards             = var.num_shards
   num_replicas_per_shard = var.num_replicas_per_shard
   
   acl_name = var.acl_name
@@ -29,6 +38,6 @@ resource "aws_subnet" "test_subnet" {
 }
 
 resource "aws_memorydb_subnet_group" "test_subnet_group" {
-  name       = var.subnet_group_name
+  name       = "sg-${random_id.resource.hex}"
   subnet_ids = [aws_subnet.test_subnet.id]
 }
