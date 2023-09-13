@@ -1,5 +1,7 @@
-variable "subnet_group_name" {
-  type        = string
+variable "context" {
+  description = "This variable contains Radius recipe context."
+
+  type = any
 }
 
 variable "node_type" {
@@ -10,10 +12,6 @@ variable "node_type" {
 variable "num_shards" {
   type        = number
   default = 1
-}
-
-variable "memory_db_cluster_name" {
-  type        = string
 }
 
 variable "num_replicas_per_shard" {
